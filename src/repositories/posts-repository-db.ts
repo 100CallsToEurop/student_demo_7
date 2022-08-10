@@ -89,10 +89,10 @@ export class PostsRepository{
         const postInstance = await PostsModel.findOne({_id})
         if(!postInstance) return null
         if(postInstance.extendedLikesInfo.newestLikes.length > 3) {
-            const result = postInstance.extendedLikesInfo.newestLikes.slice(-3)
+            const result = postInstance.extendedLikesInfo.newestLikes.slice(-3).reverse()
             return result
         }
-        return postInstance.extendedLikesInfo.newestLikes
+        return postInstance.extendedLikesInfo.newestLikes.reverse()
     }
 
     async addLastLikeUser(_id: ObjectId, userInfo: LikeDetails) {
