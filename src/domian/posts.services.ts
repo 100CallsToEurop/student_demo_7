@@ -102,7 +102,6 @@ export class PostsService{
         if(!post) return null
         const status = await this.usersService.getPostStatus(currentUserId, postId.toString())
         const lastThreeUsers = await this.postsRepository.getLastThreeUsers(postId)
-        console.log(lastThreeUsers)
         return {
             id: post._id.toString(),
             title: post.title,
