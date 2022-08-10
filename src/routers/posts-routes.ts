@@ -55,5 +55,6 @@ postsRouter.post('/:postId/comments',
 postsRouter.put('/:postId/like-status',
     authMiddlewareJWT,
     statusForLike,
+inputValidatorMiddleware,
     inputValidatorPostMiddleware,
     postsController.updatePostLike.bind(postsController))

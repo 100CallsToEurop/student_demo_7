@@ -27,6 +27,7 @@ commentsRouter.delete('/:commentId',
 commentsRouter.put('/:commentId/like-status',
     authMiddlewareJWT,
     statusForLike,
-    inputValidatorPostMiddleware,
+    inputValidatorMiddleware,
+    inputValidatorPostMiddleware
     commentController.updateCommentLike.bind(commentController))
 
