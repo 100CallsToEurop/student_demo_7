@@ -14,6 +14,7 @@ import {commentValidation, statusForLike} from "../middleware/comment-middleware
 import {container} from "../composition-root";
 import {PostsController} from "../controllers/post.controller";
 import {checkCurrentUser} from "../middleware/check-current-user";
+import {inputValidatorPostMiddleware} from "../middleware/input-validator-post-middleware";
 
 const postsController = container.resolve(PostsController)
 
@@ -54,5 +55,5 @@ postsRouter.post('/:postId/comments',
 postsRouter.put('/:postId/like-status',
     authMiddlewareJWT,
     statusForLike,
-    inputValidatorMiddleware,
+    inputValidatorPostMiddleware,
     postsController.updatePostLike.bind(postsController))
