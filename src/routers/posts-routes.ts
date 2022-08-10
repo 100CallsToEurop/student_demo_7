@@ -5,7 +5,7 @@ import {inputValidatorMiddleware} from "../middleware/input-validator-middleware
 import {authMiddleware} from "../middleware/auth-middleware";
 import {
     bloggerIdValidation,
-    contentValidation,
+    contentValidation, inputValidatorPostMiddleware,
     shortDescriptionValidation,
     titleValidationPosts
 } from "../middleware/post-middleware";
@@ -14,7 +14,7 @@ import {commentValidation, statusForLike} from "../middleware/comment-middleware
 import {container} from "../composition-root";
 import {PostsController} from "../controllers/post.controller";
 import {checkCurrentUser} from "../middleware/check-current-user";
-import {inputValidatorPostMiddleware} from "../middleware/input-validator-post-middleware";
+
 
 const postsController = container.resolve(PostsController)
 

@@ -1,4 +1,6 @@
 import {body} from "express-validator";
+import {NextFunction, Request, Response} from "express";
+import {ObjectId} from "mongodb";
 
 export const titleValidationPosts = body('title')
     .trim()
@@ -25,3 +27,11 @@ export const bloggerIdValidation = body('bloggerId')
     .exists()
     .notEmpty()
     .withMessage('bloggerId must be numeric')
+
+export const inputValidatorPostMiddleware = (req: Request, res: Response, next: NextFunction) => {
+    if(!ObjectId.isValid(req.params.postId)){
+        res.status(404).send("Not found")
+    }
+    next()
+    return
+}

@@ -1,6 +1,6 @@
 import "reflect-metadata"
 import {Router} from "express";
-import {commentValidation, statusForLike} from "../middleware/comment-middleware";
+import {commentValidation, inputValidatorCommentMiddleware, statusForLike} from "../middleware/comment-middleware";
 import {inputValidatorMiddleware} from "../middleware/input-validator-middleware";
 import {authMiddlewareJWT} from "../middleware/auth-middleware-jwt";
 import {container} from "../composition-root";
@@ -25,6 +25,7 @@ commentsRouter.delete('/:commentId',
 commentsRouter.put('/:commentId/like-status',
     authMiddlewareJWT,
     statusForLike,
+    inputValidatorCommentMiddleware,
     inputValidatorMiddleware,
     commentController.updateCommentLike.bind(commentController))
 
