@@ -107,10 +107,6 @@ export class PostsController{
     }
 
     async updatePostLike(req: Request<{postId: string}, {likeStatus: string}>, res: Response){
-        if(ObjectId.isValid(req.params.postId)){
-            res.status(404).send('Not found')
-            return
-        }
         const postId = new ObjectId(req.params.postId)
         const currentUserId = new ObjectId(req.user!._id)
         const {likeStatus}: likeStatus = req.body
