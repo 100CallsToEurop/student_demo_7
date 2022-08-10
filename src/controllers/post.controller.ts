@@ -107,7 +107,7 @@ export class PostsController{
     }
 
     async updatePostLike(req: Request<{postId: string}, {likeStatus: string}>, res: Response){
-        if(!ObjectId.isValid(req.params.postId)){
+        if(ObjectId.isValid(req.params.postId)){
             res.status(404).send('Not found')
             return
         }

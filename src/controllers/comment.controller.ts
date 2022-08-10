@@ -68,7 +68,7 @@ export class CommentController{
     }
 
     async updateCommentLike(req: Request<{commentId: string}, {likeStatus: string}>, res: Response){
-        if(!ObjectId.isValid(req.params.commentId)){
+        if(ObjectId.isValid(req.params.commentId)){
             res.status(404).send('Not found')
             return
         }
