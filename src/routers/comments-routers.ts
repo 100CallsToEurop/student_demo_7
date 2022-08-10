@@ -28,6 +28,6 @@ commentsRouter.put('/:commentId/like-status',
     authMiddlewareJWT,
     statusForLike,
     inputValidatorMiddleware,
-    inputValidatorPostMiddleware
+    inputValidatorPostMiddleware,
     commentController.updateCommentLike.bind(commentController))
 
