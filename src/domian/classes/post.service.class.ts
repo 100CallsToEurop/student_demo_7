@@ -8,6 +8,7 @@ export class PostClass{
         public content: string,
         public bloggerId: string,
         public bloggerName: string,
+        public addedAt: Date,
         public extendedLikesInfo: {
            likesCount: number
            dislikesCount: number

@@ -31,6 +31,7 @@ export class PostsService{
             createParam.content,
             createParam.bloggerId,
             blogger.name,
+            new Date(),
             {
                 likesCount: 0,
                 dislikesCount: 0,
@@ -45,6 +46,7 @@ export class PostsService{
             content: newPost.content,
             bloggerId: newPost.bloggerId,
             bloggerName: newPost.bloggerName,
+            addedAt: newPost.addedAt.toDateString(),
             extendedLikesInfo:{
                 likesCount: newPost.extendedLikesInfo.likesCount,
                 dislikesCount: newPost.extendedLikesInfo.dislikesCount,
@@ -76,6 +78,7 @@ export class PostsService{
                     content: item.content,
                     bloggerId: item.bloggerId,
                     bloggerName: item.bloggerName,
+                    addedAt: item.addedAt.toDateString(),
                     extendedLikesInfo: {
                         likesCount: item.extendedLikesInfo.likesCount,
                         dislikesCount: item.extendedLikesInfo.dislikesCount,
@@ -107,6 +110,7 @@ export class PostsService{
             content: post.content,
             bloggerId: post.bloggerId,
             bloggerName: post.bloggerName,
+            addedAt: post.addedAt.toDateString(),
             extendedLikesInfo: {
                 likesCount: post.extendedLikesInfo.likesCount,
                 dislikesCount: post.extendedLikesInfo.dislikesCount,

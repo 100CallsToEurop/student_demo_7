@@ -20,6 +20,7 @@ export type LikeDetails = {
 export type PostViewModel = PostInputModel & {
     id: string,
     bloggerName: string
+    addedAt: string
     extendedLikesInfo: {
         likesCount: number,
         dislikesCount: number,

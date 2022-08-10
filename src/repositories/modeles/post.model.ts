@@ -8,6 +8,7 @@ const postSchema = new mongoose.Schema<IPost>({
     content: { type: String, required: true },
     bloggerId: { type: String, required: true },
     bloggerName: { type: String, required: true },
+    addedAt: {type: Date},
     extendedLikesInfo:{
         likesCount: {type: Number, default: 0},
         dislikesCount: {type: Number, default: 0},

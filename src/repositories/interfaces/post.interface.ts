@@ -13,6 +13,7 @@ export interface IPost{
     content: string,
     bloggerId: string,
     bloggerName: string,
+    addedAt: Date,
     extendedLikesInfo:{
         likesCount: number
         dislikesCount: number
