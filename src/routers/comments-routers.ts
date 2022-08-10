@@ -6,8 +6,6 @@ import {authMiddlewareJWT} from "../middleware/auth-middleware-jwt";
 import {container} from "../composition-root";
 import {CommentController} from "../controllers/comment.controller";
 import {checkCurrentUser} from "../middleware/check-current-user";
-import {inputValidatorPostMiddleware} from "../middleware/input-validator-post-middleware";
-
 
 const commentController = container.resolve(CommentController)
 
@@ -28,6 +26,5 @@ commentsRouter.put('/:commentId/like-status',
     authMiddlewareJWT,
     statusForLike,
     inputValidatorMiddleware,
-    inputValidatorPostMiddleware,
     commentController.updateCommentLike.bind(commentController))
 
