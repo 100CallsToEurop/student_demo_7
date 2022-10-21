@@ -25,7 +25,9 @@ export const jwtService = {
         if(user){
             return {
                 id: user._id.toString(),
-                login: user.accountData.userName
+                email: user.accountData.email,
+                login: user.accountData.userName,
+                createdAt: user.accountData.createAt.toString()
             }
         }
         return null
