@@ -35,8 +35,11 @@ app.use('/api/comments', commentsRouter)
 app.use('/api/blogs', bloggersRouter)
 app.use('/api/posts', postsRouter)
 app.use('/api/testing', testingRouter)
+<<<<<<< HEAD
 app.use('/api/pair-game-quiz', gameRouter)
 app.use('/api/questions',questionRouter)
+=======
+>>>>>>> 90d0587f8108cfe50c5ade4259f188056f55d964
 
 const startApp = async() =>{
     await runDb()

@@ -137,7 +137,9 @@ export class UsersService {
                 return{
                     user: {
                         id: item._id.toString(),
-                        login: item.accountData.userName
+                        email: item.accountData.email,
+                        login: item.accountData.userName,
+                        createdAt: item.accountData.createAt.toString()
                     },
                     sumScore: item.gameStatistic.sumScore,
                     avgScores: item.gameStatistic.avgScores,
