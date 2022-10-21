@@ -7,6 +7,7 @@ import {BloggersRepository} from "../repositories/bloggers-repository-db";
 import {BloggerQuery, BloggerViewModel, PaginationBloggers} from "./types/blogger.type";
 import {BloggerServiceClass} from "./classes/blogger.service.class";
 import {BloggerDto} from "./dto/blogger.dto";
+import {IBlogger} from "../repositories/interfaces/blogger.interface";
 
 @injectable()
 export class BloggersService{
@@ -14,19 +15,18 @@ export class BloggersService{
         private bloggersRepository: BloggersRepository
     ) {}
 
-    async createBlogger(createParam: BloggerDto): Promise<BloggerViewModel>{
-        const {name, youtubeUrl} = createParam
-        const newBlogger = new BloggerServiceClass(
-            new ObjectId(),
-            name,
-            youtubeUrl
-        )
-        await this.bloggersRepository.createBlogger(newBlogger)
+    buildResponseBlogger(blogger: IBlogger): BloggerViewModel{
         return {
-            id: newBlogger._id.toString(),
-            name: newBlogger.name,
-            youtubeUrl: newBlogger.youtubeUrl
+            id: blogger._id.toString(),
+            name: blogger.name,
+            youtubeUrl: blogger.youtubeUrl
         }
+    }
+
+    async createBlogger(createParam: BloggerDto): Promise<BloggerViewModel>{
+        const newBlogger = new BloggerServiceClass(createParam)
+        await this.bloggersRepository.createBlogger(newBlogger)
+        return this.buildResponseBlogger(newBlogger)
     }
 
     async updateBloggerById(id: ObjectId, updateParam: BloggerDto): Promise<boolean |  null> {
@@ -44,24 +44,14 @@ export class BloggersService{
             page,
             pageSize,
             totalCount,
-            items: items.map(item =>{
-                return{
-                    id: item._id.toString(),
-                    name: item.name,
-                    youtubeUrl: item.youtubeUrl
-                }
-            })
+            items: items.map(item => this.buildResponseBlogger(item))
         }
 
     }
     async getBloggerById(id: ObjectId): Promise<BloggerViewModel | null> {
         const blogger = await this.bloggersRepository.getBloggerById(id)
         if(!blogger) return null
-        return {
-            id: blogger._id.toString(),
-            name: blogger.name,
-            youtubeUrl: blogger.youtubeUrl
-        }
+        return this.buildResponseBlogger(blogger)
     }
     async deleteBloggerById(id: ObjectId): Promise<boolean> {
         return await this.bloggersRepository.deleteBloggerById(id)

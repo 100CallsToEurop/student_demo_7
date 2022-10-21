@@ -1,17 +1,21 @@
 import {ObjectId} from "mongodb";
 
 export class CommentServiceClass {
+    _id: ObjectId
+    addedAt: Date
+    likesInfo
     constructor(
-        public _id: ObjectId,
         public userId: string,
         public content: string,
         public userLogin: string,
-        public addedAt: string,
         public postId: string,
-        public likesInfo: {
-            likesCount: number
-            dislikesCount: number
-        }
+
     ) {
+        this._id = new ObjectId()
+        this.addedAt = new Date()
+        this.likesInfo = {
+            likesCount: 0,
+            dislikesCount: 0
+        }
     }
 }

@@ -1,11 +1,14 @@
 import {ObjectId} from "mongodb";
+import {BloggerDto} from "../dto/blogger.dto";
 
 export class BloggerServiceClass {
-    constructor(
-        public _id: ObjectId,
-        public name: string,
-        public youtubeUrl: string
-    ) {
+    _id: ObjectId
+    name: string
+    youtubeUrl: string
+    constructor(public createParam: BloggerDto) {
+        this._id = new ObjectId()
+        this.name = createParam.name
+        this.youtubeUrl = createParam.youtubeUrl
     }
 
 }

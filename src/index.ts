@@ -14,6 +14,8 @@ import {commentsRouter} from "./routers/comments-routers";
 import {bloggersRouter} from "./routers/bloggers-routes";
 import {postsRouter} from "./routers/posts-routes";
 import {testingRouter} from "./routers/testing-routers";
+import {gameRouter} from "./routers/game-routers"
+import {questionRouter} from "./routers/questions-routers";
 
 
 
@@ -27,12 +29,14 @@ app.use(cookieParser())
 app.use(jsonMiddleware)
 app.set('trust proxy', true);
 
-app.use('/auth', authRouter)
-app.use('/users', usersRouter)
-app.use('/comments', commentsRouter)
-app.use('/bloggers', bloggersRouter)
-app.use('/posts', postsRouter)
-app.use('/testing', testingRouter)
+app.use('/api/auth', authRouter)
+app.use('/api/users', usersRouter)
+app.use('/api/comments', commentsRouter)
+app.use('/api/blogs', bloggersRouter)
+app.use('/api/posts', postsRouter)
+app.use('/api/testing', testingRouter)
+app.use('/api/pair-game-quiz', gameRouter)
+app.use('/api/questions',questionRouter)
 
 const startApp = async() =>{
     await runDb()

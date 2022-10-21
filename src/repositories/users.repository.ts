@@ -4,6 +4,7 @@ import {ILikes, IUser, LikeStatus} from "./interfaces/user.interface";
 import {UserModel} from "./modeles/user.model";
 import {Query} from "./types/query.type";
 import {injectable} from "inversify";
+import {GameParam, TopGamePlayerViewModel} from "../domian/types/user.type";
 
 @injectable()
 export class UsersRepository{
@@ -206,6 +207,21 @@ export class UsersRepository{
         user.markModified('likeEvent')
         await user.save()
         return true
+    }
+
+    //game
+    async addFinishGame(_id: ObjectId, updateParam: IUser) {
+        return UserModel.findOneAndUpdate({_id}, updateParam, {
+            returnOriginal: false
+        })
+    }
+
+
+    async getGameUsers(queryParams: Query): Promise<IUser[]>{
+        const page = Number(queryParams.PageNumber) || 1
+        const pageSize = Number(queryParams.PageSize) || 10
+        const skip: number = (page-1) * pageSize
+        return UserModel.find().skip(skip).limit(pageSize).sort({"user.gameStatistic.sumScore": 1}).lean()
     }
 }
 

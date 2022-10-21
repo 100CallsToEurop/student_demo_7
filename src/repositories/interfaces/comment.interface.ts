@@ -5,7 +5,7 @@ export interface IComment{
     content: string
     userId: string
     userLogin: string
-    addedAt: string
+    addedAt: Date
     postId: string
     likesInfo: {
         likesCount: number

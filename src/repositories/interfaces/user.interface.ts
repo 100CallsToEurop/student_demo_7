@@ -1,4 +1,5 @@
 import {ObjectId} from "mongodb";
+import {TopGamePlayerViewModel, UserViewModel} from "../../domian/types/user.type";
 
 export enum LikeStatus{
     NONE = 'None',
@@ -31,5 +32,13 @@ export interface IUser{
     likeEvent:{
         postsLikes:Array<ILikes>
         commentsLikes:Array<ILikes>
+    }
+    gameStatistic:{
+        gamePlayedId: Array<string>,
+        sumScore: number,
+        avgScores: number,
+        gamesCount: number,
+        winsCount: number,
+        lossesCount: number
     }
 }

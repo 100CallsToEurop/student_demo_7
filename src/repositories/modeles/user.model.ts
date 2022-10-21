@@ -20,6 +20,14 @@ const userSchema = new mongoose.Schema<IUser>({
     likeEvent:{
         postsLikes:[],
         commentsLikes:[]
+    },
+    gameStatistic:{
+        gamePlayedId: [String],
+        sumScore: Number,
+        avgScores: Number,
+        gamesCount: Number,
+        winsCount: Number,
+        lossesCount: Number
     }
 });
 

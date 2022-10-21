@@ -1,16 +1,13 @@
 import "reflect-metadata"
 import {UsersRepository} from "../repositories/users.repository";
 import {CreateUserDto} from "./dto/create-user.dto";
-import {PaginationUsers, UserViewModel} from "./types/user.type";
+import {GameParam, PaginationTopUsers, PaginationUsers, TopGamePlayerViewModel, UserViewModel} from "./types/user.type";
 import bcrypt from 'bcrypt'
-import {v4 as uuidv4} from "uuid";
-import add from 'date-fns/add'
 import {UserServiceClass} from "./classes/user.service.class";
 import {ObjectId} from "mongodb";
 import {Query} from "../repositories/types/query.type";
-import {LikeStatus} from "../repositories/interfaces/user.interface";
+import {IUser, LikeStatus} from "../repositories/interfaces/user.interface";
 import {injectable} from "inversify";
-import {PostsService} from "./posts.services";
 
 @injectable()
 export class UsersService {
@@ -18,30 +15,20 @@ export class UsersService {
         private usersRepository: UsersRepository
     ){}
 
+    buildResponseUser(user: IUser): UserViewModel{
+        return {
+            id: user._id.toString(),
+            email: user.accountData.email,
+            login: user.accountData.userName,
+            createdAt: user.accountData.createAt.toString()
+        }
+    }
+
     async createUser(createParam: CreateUserDto): Promise<UserViewModel | null>{
         const passwordHash = await this._generateHash(createParam.password)
-        const newUser = new UserServiceClass(
-            new ObjectId(),
-            {
-                userName: createParam.login,
-                email: createParam.email,
-                passwordHash,
-                createAt: new Date()
-            },
-            {
-                confirmationCode: uuidv4(),
-                expirationDate: add(new Date(), {
-                    hours: 1,
-                    minutes: 3
-                }),
-                isConfirmed: true
-            }
-        )
+        const newUser = new UserServiceClass(createParam, passwordHash, true)
         await this.usersRepository.createUser(newUser)
-        return {
-            id: newUser._id.toString(),
-            login: newUser.accountData.userName,
-        }
+        return this.buildResponseUser(newUser)
     }
 
     async getUsers(queryParams: Query): Promise<PaginationUsers>{
@@ -55,12 +42,7 @@ export class UsersService {
             page,
             pageSize,
             totalCount,
-            items: items.map(item =>{
-                return{
-                    id: item._id.toString(),
-                    login: item.accountData.userName
-                }
-            })
+            items: items.map(item =>this.buildResponseUser(item))
         }
 
     }
@@ -68,10 +50,7 @@ export class UsersService {
     async getUser(id: ObjectId): Promise<UserViewModel | null>{
         const user = await this.usersRepository.findUserById(id)
         if(!user) return null
-        return {
-            id: user._id.toString(),
-            login: user.accountData.userName,
-        }
+        return this.buildResponseUser(user)
     }
 
     async deleteUser(id: ObjectId){
@@ -128,6 +107,47 @@ export class UsersService {
         return true
     }
 
+    //game
+    async addFinishGame(id: ObjectId, gameParam: GameParam): Promise<boolean | null>{
+        const user = await this.usersRepository.findUserById(id)
+        if(!user) return null
+        user.gameStatistic.gamePlayedId.push(gameParam.gameId)
+        user.gameStatistic.sumScore += gameParam.sumScore
+        user.gameStatistic.gamesCount = user.gameStatistic.gamePlayedId.length
+        user.gameStatistic.avgScores = user.gameStatistic.sumScore / user.gameStatistic.gamesCount
+        user.gameStatistic.winsCount += gameParam.winsCount
+        user.gameStatistic.lossesCount += gameParam.lossesCount
+        const success = await this.usersRepository.addFinishGame(id, user)
+        if(!success) return null
+        return true
+    }
+
+    async  getGameUsers(queryParams: Query): Promise <PaginationTopUsers>{
+        const items = await this.usersRepository.getGameUsers(queryParams)
+        const totalCount = items.length
+        const page = Number(queryParams.PageNumber) || 1
+        const pageSize = Number(queryParams.PageSize) || 10
+        const pagesCount = Math.ceil(totalCount/pageSize)
+        return {
+            pagesCount,
+            page,
+            pageSize,
+            totalCount,
+            items: items.map(item =>{
+                return{
+                    user: {
+                        id: item._id.toString(),
+                        login: item.accountData.userName
+                    },
+                    sumScore: item.gameStatistic.sumScore,
+                    avgScores: item.gameStatistic.avgScores,
+                    gamesCount: item.gameStatistic.gamesCount,
+                    winsCount: item.gameStatistic.winsCount,
+                    lossesCount: item.gameStatistic.lossesCount
+                }
+            })
+        }
+    }
 
 
     async _generateHash(password: string){

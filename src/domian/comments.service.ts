@@ -8,6 +8,7 @@ import {CommentServiceClass} from "./classes/comments.service.class";
 import {CommentInputModel, CommentQuery, CommentViewModel, likeStatus, PaginationComments} from "./types/comment.type";
 import {CommentDto} from "./dto/comment.dto";
 import {LikeStatus} from "../repositories/interfaces/user.interface";
+import {IComment} from "../repositories/interfaces/comment.interface";
 
 
 @injectable()
@@ -18,44 +19,46 @@ export class CommentService{
         private usersService: UsersService
     ) {}
 
+    async buildResponseComment(comment: IComment, currentUser: ObjectId | null):Promise<CommentViewModel>{
+        let status = null
+        if(currentUser)
+        status = await this.usersService.getCommentStatus(currentUser, comment._id.toString())
+        return {
+            id: comment._id.toString(),
+            content: comment.content,
+            userId: comment.userId,
+            userLogin: comment.userLogin,
+            addedAt: comment.addedAt.toDateString(),
+            likesInfo: {
+                likesCount: comment.likesInfo.likesCount,
+                dislikesCount: comment.likesInfo.dislikesCount,
+                myStatus: status ? status : LikeStatus.NONE
+            },
+        }
+    }
+
     async createComment(
         currentUserId: ObjectId,
         postId: ObjectId,
-        createParam: CommentInputModel
+        createParam: CommentDto
     ):Promise<CommentViewModel | null> {
         const user = await this.usersService.getUser(currentUserId)
         const posts = await this.postsService.getPostById(currentUserId, postId)
         if (!posts) return null
         const newComment = new CommentServiceClass(
-            new ObjectId(),
             currentUserId.toString(),
             createParam.content,
             user!.login,
-            (new Date()).toString(),
             postId.toString(),
-            {
-                likesCount: 0,
-                dislikesCount: 0
-            }
         )
         await this.commentsRepository.createComments(newComment)
-        return {
-            id: newComment._id.toString(),
-            content: newComment.content,
-            userId: newComment.userId,
-            userLogin: newComment.userLogin,
-            addedAt: newComment.addedAt,
-            likesInfo: {
-                likesCount: newComment.likesInfo.likesCount,
-                dislikesCount: newComment.likesInfo.dislikesCount,
-                myStatus: "None" as LikeStatus
-            },
-        }
+        return await this.buildResponseComment(newComment, null)
+
     }
 
-    async getComments(currentUser: ObjectId, queryParams: CommentQuery): Promise<PaginationComments | null>{
+    async getComments(currentUserId: ObjectId, queryParams: CommentQuery): Promise<PaginationComments | null>{
         if(queryParams.postId !== undefined) {
-            const posts = await this.postsService.getPostById(currentUser, new ObjectId(queryParams.postId))
+            const posts = await this.postsService.getPostById(currentUserId, new ObjectId(queryParams.postId))
             if (!posts) return null
         }
         const items = await this.commentsRepository.getComments(queryParams)
@@ -64,21 +67,7 @@ export class CommentService{
         const pageSize = Number(queryParams.PageSize) || 10
         const pagesCount = Math.ceil(totalCount/pageSize)
         const itemResult = await Promise.all(
-            items.map(async(item): Promise<CommentViewModel> =>{
-                const status = await this.usersService.getCommentStatus(currentUser, item._id.toString())
-                return {
-                    id: item._id.toString(),
-                    userId: item.userId,
-                    content: item.content,
-                    userLogin: item.userLogin,
-                    addedAt: item.addedAt,
-                    likesInfo: {
-                        likesCount: item.likesInfo.likesCount,
-                        dislikesCount: item.likesInfo.dislikesCount,
-                        myStatus:  status ? status : LikeStatus.NONE
-                    },
-                }
-            })
+            items.map(async(item): Promise<CommentViewModel> =>await this.buildResponseComment(item, currentUserId))
         )
         return{
             pagesCount,
@@ -95,19 +84,7 @@ export class CommentService{
     async getCommentById(currentUserId: ObjectId ,commentId: ObjectId): Promise<CommentViewModel | null> {
         const comment = await this.commentsRepository.getCommentById(commentId)
         if(!comment) return null
-        const status = await this.usersService.getCommentStatus(currentUserId, commentId.toString())
-        return {
-            id: comment._id.toString(),
-            content: comment.content,
-            userId: comment.userId,
-            userLogin: comment.userLogin,
-            addedAt: comment.addedAt,
-            likesInfo: {
-                likesCount: comment.likesInfo.likesCount,
-                dislikesCount: comment.likesInfo.dislikesCount,
-                myStatus: status ? status : LikeStatus.NONE
-            }
-        }
+       return await this.buildResponseComment(comment, currentUserId)
     }
     async deleteCommentById(id: ObjectId){
         return await this.commentsRepository.deleteCommentById(id)

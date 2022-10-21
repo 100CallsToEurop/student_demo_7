@@ -5,7 +5,6 @@ import {CommentQuery} from "../domian/types/comment.type";
 import {IComment} from "./interfaces/comment.interface";
 import {CommentModel} from "./modeles/comment.model";
 import {CommentDto} from "../domian/dto/comment.dto";
-import {LikeStatus} from "./interfaces/user.interface";
 
 
 @injectable()

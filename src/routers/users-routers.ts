@@ -21,6 +21,7 @@ usersRouter.post('/',
     )
 usersRouter.delete('/:id', authMiddleware, usersController.deleteUser.bind(usersController))
 usersRouter.get('/:id/com', usersController.getCommentStatus.bind(usersController))
+
 usersRouter.delete('/:id/com', usersController.setNoneStatusComment.bind(usersController))
 usersRouter.post('/:id/com', usersController.eventLikeComment.bind(usersController))
 

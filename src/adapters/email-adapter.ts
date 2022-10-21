@@ -1,6 +1,8 @@
+import "reflect-metadata"
 import nodemailer from "nodemailer";
-
-export const emailAdapter = {
+import {injectable} from "inversify";
+@injectable()
+export class EmailAdapter{
     async sendEmail(email: string, subject: string, text: string, html?: string){
         let transporter = nodemailer.createTransport({
             service: "gmail",
@@ -9,7 +11,6 @@ export const emailAdapter = {
                 pass: "xhjlvrdmplxzkndo",
             }
         })
-        console.log(html)
         let info = await transporter.sendMail({
             from: 'Vladimir <petiryakov@teh.expert>',
             to: email,
@@ -19,3 +20,5 @@ export const emailAdapter = {
         })
     }
 }
+
+export const emailAdapter = new EmailAdapter()

@@ -9,6 +9,7 @@ import {PostClass} from "./classes/post.service.class";
 import {UsersService} from "./users.service";
 import {LikeStatus} from "../repositories/interfaces/user.interface";
 import {likeStatus} from "../domian/types/comment.type";
+import {IPost} from "../repositories/interfaces/post.interface";
 
 
 @injectable()
@@ -20,41 +21,34 @@ export class PostsService{
         private bloggersService: BloggersService
     ) {}
 
+    async buildResponsePost(post: IPost, currentUser: ObjectId | null):Promise<PostViewModel>{
+        let status = null
+        if(currentUser) status = await this.usersService.getPostStatus(currentUser, post._id.toString())
+        const lastThreeUsers = await this.postsRepository.getLastThreeUsers(post._id)
+        return {
+            id: post._id.toString(),
+            title: post.title,
+            shortDescription: post.shortDescription,
+            content: post.content,
+            bloggerId: post.bloggerId,
+            bloggerName: post.bloggerName,
+            addedAt: post.addedAt.toDateString(),
+            extendedLikesInfo: {
+                likesCount: post.extendedLikesInfo.likesCount,
+                dislikesCount: post.extendedLikesInfo.dislikesCount,
+                myStatus:  status ? status : LikeStatus.NONE,
+                newestLikes: lastThreeUsers ? lastThreeUsers : []
+            }
+        }
+    }
+
     async createPost(createParam: PostDto):Promise<PostViewModel | null>  {
 
         const blogger = await this.bloggersService.getBloggerById(new ObjectId(createParam.bloggerId))
         if(!blogger) return null
-        const newPost = new PostClass(
-            new ObjectId(),
-            createParam.title,
-            createParam.shortDescription,
-            createParam.content,
-            createParam.bloggerId,
-            blogger.name,
-            new Date(),
-            {
-                likesCount: 0,
-                dislikesCount: 0,
-                newestLikes: []
-            }
-        )
+        const newPost = new PostClass(createParam, blogger.name)
         await this.postsRepository.createPost(newPost)
-        return {
-            id: newPost._id.toString(),
-            title: newPost.title,
-            shortDescription: newPost.shortDescription,
-            content: newPost.content,
-            bloggerId: newPost.bloggerId,
-            bloggerName: newPost.bloggerName,
-            addedAt: newPost.addedAt.toDateString(),
-            extendedLikesInfo:{
-                likesCount: newPost.extendedLikesInfo.likesCount,
-                dislikesCount: newPost.extendedLikesInfo.dislikesCount,
-                myStatus: "None" as LikeStatus,
-                newestLikes: []
-            }
-
-        }
+        return await this.buildResponsePost(newPost, null)
     }
 
     async getPosts(currentUser: ObjectId, queryParams: PostQuery): Promise<PaginationPosts | null> {
@@ -68,25 +62,7 @@ export class PostsService{
         const pageSize = Number(queryParams.PageSize) || 10
         const pagesCount = Math.ceil(totalCount/pageSize)
         const itemResult = await Promise.all(
-            items.map(async(item): Promise<PostViewModel> =>{
-                const status = await this.usersService.getPostStatus(currentUser, item._id.toString())
-                const lastThreeUsers = await this.postsRepository.getLastThreeUsers(item._id)
-                return {
-                    id: item._id.toString(),
-                    title: item.title,
-                    shortDescription: item.shortDescription,
-                    content: item.content,
-                    bloggerId: item.bloggerId,
-                    bloggerName: item.bloggerName,
-                    addedAt: item.addedAt.toDateString(),
-                    extendedLikesInfo: {
-                        likesCount: item.extendedLikesInfo.likesCount,
-                        dislikesCount: item.extendedLikesInfo.dislikesCount,
-                        myStatus:  status ? status : LikeStatus.NONE,
-                        newestLikes: lastThreeUsers ? lastThreeUsers : []
-                    },
-                }
-            })
+            items.map(async(item): Promise<PostViewModel> => await this.buildResponsePost(item, currentUser))
         )
         return{
             pagesCount,
@@ -100,23 +76,7 @@ export class PostsService{
     async getPostById(currentUserId: ObjectId , postId: ObjectId): Promise<PostViewModel | null> {
         const post = await this.postsRepository.getPostById(postId)
         if(!post) return null
-        const status = await this.usersService.getPostStatus(currentUserId, postId.toString())
-        const lastThreeUsers = await this.postsRepository.getLastThreeUsers(postId)
-        return {
-            id: post._id.toString(),
-            title: post.title,
-            shortDescription: post.shortDescription,
-            content: post.content,
-            bloggerId: post.bloggerId,
-            bloggerName: post.bloggerName,
-            addedAt: post.addedAt.toDateString(),
-            extendedLikesInfo: {
-                likesCount: post.extendedLikesInfo.likesCount,
-                dislikesCount: post.extendedLikesInfo.dislikesCount,
-                myStatus: status ? status : LikeStatus.NONE,
-                newestLikes: lastThreeUsers ? lastThreeUsers : []
-            }
-        }
+        return await this.buildResponsePost(post, currentUserId)
     }
     async deletePostById(id: ObjectId): Promise<boolean> {
         return await this.postsRepository.deletePostById(id)

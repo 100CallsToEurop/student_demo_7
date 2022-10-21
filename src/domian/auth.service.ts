@@ -1,6 +1,6 @@
 import "reflect-metadata"
 
-import {emailManager} from "../managers/registration-user";
+import {EmailTemplatesManager} from "../managers/registration-user";
 import {v4 as uuidv4} from "uuid";
 
 import {injectable} from "inversify";
@@ -10,37 +10,24 @@ import add from "date-fns/add";
 
 import bcrypt from "bcrypt";
 import {UsersRepository} from "../repositories/users.repository";
-import {UserInputModel, UserViewModel} from "./types/user.type";
+import {UserViewModel} from "./types/user.type";
 import {IUser} from "../repositories/interfaces/user.interface";
 import {LoginInputModel} from "./types/login.type";
 import {CreateUserDto} from "./dto/create-user.dto";
 
 @injectable()
 export class AuthService{
-    constructor(private usersRepository: UsersRepository){}
+    constructor(
+        private emailManager: EmailTemplatesManager,
+        private usersRepository: UsersRepository
+    ){}
 
     async createUser(userParam: CreateUserDto): Promise<UserViewModel | null>{
         const passwordHash = await this._generateHash(userParam.password)
-        const newUser = new UserServiceClass(
-            new ObjectId(),
-            {
-                userName: userParam.login,
-                email: userParam.email,
-                passwordHash,
-                createAt: new Date()
-            },
-            {
-                confirmationCode: uuidv4(),
-                expirationDate: add(new Date(), {
-                    hours: 1,
-                    minutes: 3
-                }),
-                isConfirmed: false
-            }
-        )
+        const newUser = new UserServiceClass(userParam, passwordHash, false)
         await this.usersRepository.createUser(newUser)
         try{
-            await emailManager.sendEmailConfirmationMessage(newUser)
+            await this.emailManager.sendEmailConfirmationMessage(newUser)
         }catch(err){
             console.log(err)
             //await usersRepository.deleteUserById(newUser._id)
@@ -74,7 +61,7 @@ export class AuthService{
         const newCode = user.emailConfirmation.confirmationCode = uuidv4()
         await this.usersRepository.updateConfirmationCode(user._id, newCode)
         try{
-            await emailManager.sendEmailConfirmationMessage(user)
+            await this.emailManager.sendEmailConfirmationMessage(user)
         }catch(err){
             console.log(err)
             // await usersRepository.deleteUserById(user._id)

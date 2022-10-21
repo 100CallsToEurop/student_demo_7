@@ -13,6 +13,13 @@ import {BloggersRepository} from "./repositories/bloggers-repository-db";
 import {BloggerController} from "./controllers/blogger.controller";
 import {PostsRepository} from "./repositories/posts-repository-db";
 import {PostsController} from "./controllers/post.controller";
+import {EmailAdapter} from "./adapters/email-adapter";
+import {GameController} from "./controllers/game.controller";
+import {GameService} from "./domian/game.service";
+import {GameRepository} from "./repositories/game-repository-db";
+import {QuestionRepository} from "./repositories/question-repository";
+import {QuestionService} from "./domian/question.service.";
+import {QuestionController} from "./controllers/question.controller";
 
 export const container = new Container()
 //Auth
@@ -34,3 +41,13 @@ container.bind<PostsRepository>(PostsRepository).to(PostsRepository)
 container.bind(BloggerController).to(BloggerController)
 container.bind<BloggersService>(BloggersService).to(BloggersService)
 container.bind<BloggersRepository>(BloggersRepository).to(BloggersRepository)
+//Email
+container.bind(EmailAdapter).to(EmailAdapter)
+//Game
+container.bind(GameController).to(GameController)
+container.bind<GameService>(GameService).to(GameService)
+container.bind<GameRepository>(GameRepository).to(GameRepository)
+//Question
+container.bind(QuestionController).to(QuestionController)
+container.bind<QuestionService>(QuestionService).to(QuestionService)
+container.bind<QuestionRepository>(QuestionRepository).to(QuestionRepository)
