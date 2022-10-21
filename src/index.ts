@@ -36,8 +36,8 @@ app.use('/api/blogs', bloggersRouter)
 app.use('/api/posts', postsRouter)
 app.use('/api/testing', testingRouter)
 
-app.use('/api/pair-game-quiz', gameRouter)
-app.use('/api/questions',questionRouter)
+//app.use('/api/pair-game-quiz', gameRouter)
+//app.use('/api/questions',questionRouter)
 
 
 const startApp = async() =>{
