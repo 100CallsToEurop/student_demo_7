@@ -10,7 +10,7 @@ import {
 import {checkLimitReq} from "../middleware/checkLimitRequest-middleware";
 import {inputValidatorMiddleware} from "../middleware/input-validator-middleware";
 import {container} from "../composition-root";
-import {AuthController} from "../../../game/controllers/auth.controller";
+import {AuthController} from "../controllers/auth.controller";
 import {authMiddlewareJWT} from "../middleware/auth-middleware-jwt";
 
 

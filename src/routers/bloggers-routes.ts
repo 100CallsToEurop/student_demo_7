@@ -5,7 +5,7 @@ import {authMiddleware} from "../middleware/auth-middleware";
 import {nameValidation, titleValidation} from "../middleware/blogger-middleware";
 import {contentValidation, shortDescriptionValidation, titleValidationPosts} from "../middleware/post-middleware";
 import {container} from "../composition-root";
-import {BloggerController} from "../../../game/controllers/blogger.controller";
+import {BloggerController} from "../controllers/blogger.controller";
 import {checkCurrentUser} from "../middleware/check-current-user";
 
 const bloggersController = container.resolve(BloggerController)

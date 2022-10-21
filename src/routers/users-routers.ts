@@ -4,7 +4,7 @@ import {authMiddleware} from "../middleware/auth-middleware";
 import {inputValidatorMiddleware} from "../middleware/input-validator-middleware";
 import {loginValidation, passwordValidation} from "../middleware/registration-middleware";
 import {container} from "../composition-root";
-import {UsersController} from "../../../game/controllers/user.controller";
+import {UsersController} from "../controllers/user.controller";
 
 
 const usersController = container.resolve(UsersController)

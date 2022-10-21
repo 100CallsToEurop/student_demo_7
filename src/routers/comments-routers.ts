@@ -4,7 +4,7 @@ import {commentValidation, inputValidatorCommentMiddleware, statusForLike} from 
 import {inputValidatorMiddleware} from "../middleware/input-validator-middleware";
 import {authMiddlewareJWT} from "../middleware/auth-middleware-jwt";
 import {container} from "../composition-root";
-import {CommentController} from "../../../game/controllers/comment.controller";
+import {CommentController} from "../controllers/comment.controller";
 import {checkCurrentUser} from "../middleware/check-current-user";
 
 const commentController = container.resolve(CommentController)
