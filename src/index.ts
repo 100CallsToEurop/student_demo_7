@@ -30,7 +30,7 @@ app.set('trust proxy', true);
 app.use('/api/auth', authRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/comments', commentsRouter)
-app.use('/api/bloggers', bloggersRouter)
+app.use('/api/blogs', bloggersRouter)
 app.use('/api/posts', postsRouter)
 app.use('/api/testing', testingRouter)
 
