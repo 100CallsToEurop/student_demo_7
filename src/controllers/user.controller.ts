@@ -1,12 +1,12 @@
 import "reflect-metadata"
-import {UsersService} from "../../les_04/src/domian/users.service";
+import {UsersService} from "../domian/users.service";
 import {Request, Response} from "express";
 import {ObjectId} from "mongodb";
 import {injectable} from "inversify";
 
-import {Query} from "../../les_04/src/repositories/types/query.type";
-import {UserInputModel} from "../../les_04/src/domian/types/user.type";
-import {ILikes} from "../../les_04/src/repositories/interfaces/user.interface";
+import {Query} from "../repositories/types/query.type";
+import {UserInputModel} from "../domian/types/user.type";
+import {ILikes} from "../repositories/interfaces/user.interface";
 
 
 

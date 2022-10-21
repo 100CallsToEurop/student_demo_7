@@ -1,12 +1,12 @@
 import "reflect-metadata"
 import {injectable} from "inversify";
-import {BloggersService} from "../../les_04/src/domian/bloggers.service";
+import {BloggersService} from "..//domian/bloggers.service";
 import {Request, Response} from "express";
 import {ObjectId} from "mongodb";
-import {PostsService} from "../../les_04/src/domian/posts.services";
-import {BloggerPostInputModel, BloggerQuery} from "../../les_04/src/domian/types/blogger.type";
-import {BloggerDto} from "../../les_04/src/domian/dto/blogger.dto";
-import {PostQuery} from "../../les_04/src/domian/types/post.type";
+import {PostsService} from "../domian/posts.services";
+import {BloggerPostInputModel, BloggerQuery} from "../domian/types/blogger.type";
+import {BloggerDto} from "../domian/dto/blogger.dto";
+import {PostQuery} from "../domian/types/post.type";
 
 @injectable()
 export class BloggerController{

@@ -1,12 +1,12 @@
 import "reflect-metadata"
 import {injectable} from "inversify";
-import {UsersService} from "../../les_04/src/domian/users.service";
+import {UsersService} from "../domian/users.service";
 import {Request, Response} from "express";
-import {AuthService} from "../../les_04/src/domian/auth.service";
-import {jwtService} from "../../les_04/src/applications/jwt-service";
-import {UserInputModel} from "../../les_04/src/domian/types/user.type";
-import {RegistrationConfirmationCodeModel, RegistrationEmailResending} from "../../les_04/src/domian/types/registration.type";
-import {LoginInputModel} from "../../les_04/src/domian/types/login.type";
+import {AuthService} from "../domian/auth.service";
+import {jwtService} from "../applications/jwt-service";
+import {UserInputModel} from "../domian/types/user.type";
+import {RegistrationConfirmationCodeModel, RegistrationEmailResending} from "../domian/types/registration.type";
+import {LoginInputModel} from "../domian/types/login.type";
 import {ObjectId} from "mongodb";
 
 

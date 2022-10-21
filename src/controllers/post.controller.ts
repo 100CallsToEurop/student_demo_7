@@ -1,14 +1,14 @@
 import "reflect-metadata"
 import {injectable} from "inversify";
-import {CommentService} from "../../les_04/src/domian/comments.service";
+import {CommentService} from "../domian/comments.service";
 import {Request, Response} from "express";
-import {PostsService} from "../../les_04/src/domian/posts.services";
+import {PostsService} from "../domian/posts.services";
 
 import {ObjectId} from "mongodb";
-import {PostQuery} from "../../les_04/src/domian/types/post.type";
-import {CommentQuery} from "../../les_04/src/domian/types/comment.type";
-import {UserViewModel} from "../../les_04/src/domian/types/user.type";
-import {likeStatus} from "../../les_04/src/domian/types/comment.type";
+import {PostQuery} from "../domian/types/post.type";
+import {CommentQuery} from "../domian/types/comment.type";
+import {UserViewModel} from "../domian/types/user.type";
+import {likeStatus} from "../domian/types/comment.type";
 
 
 @injectable()

@@ -2,9 +2,9 @@ import "reflect-metadata"
 import {injectable} from "inversify";
 import {Request, Response} from "express";
 import {ObjectId} from "mongodb";
-import {CommentService} from "../../les_04/src/domian/comments.service";
-import {likeStatus} from "../../les_04/src/domian/types/comment.type";
-import {CommentDto} from "../../les_04/src/domian/dto/comment.dto";
+import {CommentService} from "../domian/comments.service";
+import {likeStatus} from "../domian/types/comment.type";
+import {CommentDto} from "../domian/dto/comment.dto";
 
 
 @injectable()
