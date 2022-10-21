@@ -27,12 +27,12 @@ app.use(cookieParser())
 app.use(jsonMiddleware)
 app.set('trust proxy', true);
 
-app.use('/auth', authRouter)
-app.use('/users', usersRouter)
-app.use('/comments', commentsRouter)
-app.use('/bloggers', bloggersRouter)
-app.use('/posts', postsRouter)
-app.use('/testing', testingRouter)
+app.use('/api/auth', authRouter)
+app.use('/api/users', usersRouter)
+app.use('/api/comments', commentsRouter)
+app.use('/api/bloggers', bloggersRouter)
+app.use('/api/posts', postsRouter)
+app.use('/api/testing', testingRouter)
 
 const startApp = async() =>{
     await runDb()
