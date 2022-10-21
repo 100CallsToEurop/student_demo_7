@@ -35,7 +35,9 @@ export class AuthService{
         }
         return {
             id: newUser._id.toString(),
+            email: newUser.accountData.email,
             login: newUser.accountData.userName,
+            createdAt: newUser.accountData.createAt.toString()
         }
     }
 
@@ -87,7 +89,9 @@ export class AuthService{
         const isHashedEquals = await this._isPasswordCorrect(loginParam.password, user.accountData.passwordHash)
         if(isHashedEquals) return {
             id: user._id.toString(),
-            login: user.accountData.userName
+            email: user.accountData.email,
+            login: user.accountData.userName,
+            createdAt: user.accountData.createAt.toString()
         }
         return null
     }
