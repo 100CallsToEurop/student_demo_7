@@ -14,8 +14,8 @@ import {commentsRouter} from "./routers/comments-routers";
 import {bloggersRouter} from "./routers/bloggers-routes";
 import {postsRouter} from "./routers/posts-routes";
 import {testingRouter} from "./routers/testing-routers";
-import {gameRouter} from "./routers/game-routers"
-import {questionRouter} from "./routers/questions-routers";
+import {gameRouter} from "../../game/game-routers"
+import {questionRouter} from "../../game/questions-routers";
 
 
 

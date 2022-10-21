@@ -4,7 +4,7 @@ import {IGame} from "./interfaces/game.interface";
 import {GameModel} from "./modeles/game.model";
 import {ObjectId} from "mongodb";
 import {Query} from "./types/query.type";
-import {GameStatuses} from "../domian/types/game.type";
+import {GameStatuses} from "../../../game/game.type";
 
 @injectable()
 export class GameRepository {

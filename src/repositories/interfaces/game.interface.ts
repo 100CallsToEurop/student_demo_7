@@ -1,9 +1,9 @@
 import {ObjectId} from "mongodb";
 import {
     GameStatuses,
-} from "../../domian/types/game.type";
+} from "../../../../game/game.type";
 import {UserViewModel} from "../../domian/types/user.type";
-import {AnswerViewModel, QuestionViewModel} from "../../domian/types/question.type";
+import {AnswerViewModel, QuestionViewModel} from "../../../../game/question.type";
 
 export interface IPlayer{
     answers: Array<AnswerViewModel>,

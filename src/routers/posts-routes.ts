@@ -12,7 +12,7 @@ import {
 import {authMiddlewareJWT} from "../middleware/auth-middleware-jwt";
 import {commentValidation, statusForLike} from "../middleware/comment-middleware";
 import {container} from "../composition-root";
-import {PostsController} from "../controllers/post.controller";
+import {PostsController} from "../../../game/controllers/post.controller";
 import {checkCurrentUser} from "../middleware/check-current-user";
 
 

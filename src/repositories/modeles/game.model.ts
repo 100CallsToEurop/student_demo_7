@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import {IGame} from "../interfaces/game.interface";
 import {
     GameStatuses,
-} from "../../domian/types/game.type";
+} from "../../../../game/game.type";
 
 const gameSchema = new mongoose.Schema<IGame>({
     firstPlayer: {
