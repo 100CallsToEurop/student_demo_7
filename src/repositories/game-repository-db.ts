@@ -9,7 +9,7 @@ import {GameStatuses} from "../domian/types/game.type";
 @injectable()
 export class GameRepository {
 
-    async createGame(createParam: IGame) {
+    async createGame(createParam: any/*IGame*/) {
         const gameInstance = new GameModel(createParam)
         await gameInstance.save()
         return gameInstance
